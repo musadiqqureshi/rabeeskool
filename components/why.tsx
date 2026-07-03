@@ -1,63 +1,54 @@
-const oldStack = [
-  { tool: "Course platform", cost: "Rs 16,000/mo", pain: "plus 10% of every sale" },
-  { tool: "Community app", cost: "Rs 28,000/mo", pain: "students in a separate app" },
-  { tool: "Email & WhatsApp tools", cost: "Rs 12,000/mo", pain: "manual follow-ups" },
-  { tool: "Booking tool", cost: "Rs 5,000/mo", pain: "another login, another invoice" },
-];
-
-const wins = [
+const cards = [
   {
-    title: "One platform, one price",
-    body: "Courses, community, coaching, certificates and analytics live together — one login for you, one home for your students.",
+    title: "Disconnected Tools Create Daily Admin Drag",
+    body: "When your courses live in one tool, your community in another, bookings somewhere else, and reminders in a third, every student workflow gets harder to manage and easier to break.",
+    tint: "from-rose-50",
+    icon: "bg-rose-50 text-rose-600 border-rose-200",
   },
   {
-    title: "0% commission, forever",
-    body: "Payments land in your own bank, JazzCash or Easypaisa account. We never sit between you and your revenue.",
+    title: "Revenue Gets Eaten By Software Layers",
+    body: "Monthly subscriptions, transaction cuts, separate community apps, email tools and booking software quietly stack up long before you ever see the real margin from your programs.",
+    tint: "from-orange-50",
+    icon: "bg-orange-50 text-orange-600 border-orange-200",
   },
   {
-    title: "Near-zero hosting bills",
-    body: "Your videos and files stream straight from your own Google Drive, so your biggest cost is simply gone.",
+    title: "Growth Slows When Operations Aren't Connected",
+    body: "Onboarding, reminders, certificates, follow-ups and support all take far more manual work when your academy runs on a pile of isolated apps instead of one operating system.",
+    tint: "from-amber-50",
+    icon: "bg-amber-50 text-amber-600 border-amber-200",
   },
 ];
 
 export function Why() {
   return (
-    <section id="why" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-      <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">Why RabeeSkool</p>
-      <h2 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-        Stop juggling five subscriptions to run one academy
-      </h2>
-      <p className="mt-4 max-w-2xl text-lg text-muted">
-        Most educators stitch together a course platform, a community app, email
-        tools and booking software — then lose a cut of every sale on top.
-        RabeeSkool replaces the whole stack.
-      </p>
+    <section id="why" className="scroll-mt-24 bg-white py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+        <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">
+          Why academy operators outgrow basic LMS tools
+        </p>
+        <h2 className="mx-auto mt-3 max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-5xl">
+          Running your academy on too many tools costs more than you think.
+        </h2>
+        <p className="mx-auto mt-5 max-w-2xl text-lg text-muted">
+          Most creators don&apos;t just need course hosting. They need payments,
+          communication, engagement, coaching and delivery to work together —
+          without patching together a stack of separate tools.
+        </p>
 
-      <div className="mt-12 grid gap-8 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-paper p-6">
-          <p className="text-sm font-semibold text-muted">The old way</p>
-          <ul className="mt-4 divide-y divide-line">
-            {oldStack.map((item) => (
-              <li key={item.tool} className="flex items-baseline justify-between gap-4 py-3">
-                <div>
-                  <p className="font-medium text-ink">{item.tool}</p>
-                  <p className="text-sm text-muted">{item.pain}</p>
-                </div>
-                <p className="whitespace-nowrap text-sm font-semibold text-red-600">{item.cost}</p>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-4 flex items-baseline justify-between border-t-2 border-line pt-4">
-            <p className="font-semibold text-ink">Every month</p>
-            <p className="font-semibold text-red-600">Rs 61,000+ and a % of sales</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          {wins.map((w) => (
-            <div key={w.title} className="rounded-2xl border border-brand-200 bg-brand-50 p-6">
-              <h3 className="text-lg font-semibold text-brand-900">{w.title}</h3>
-              <p className="mt-2 leading-relaxed text-brand-800">{w.body}</p>
+        <div className="mt-14 grid gap-6 text-left lg:grid-cols-3">
+          {cards.map((c) => (
+            <div
+              key={c.title}
+              className={`rounded-3xl border border-line bg-gradient-to-b ${c.tint} to-white p-8 shadow-card`}
+            >
+              <span className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl border ${c.icon}`}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M15 9l-6 6M9 9l6 6" />
+                </svg>
+              </span>
+              <h3 className="mt-6 text-xl font-semibold leading-snug text-ink">{c.title}</h3>
+              <p className="mt-3 leading-relaxed text-muted">{c.body}</p>
             </div>
           ))}
         </div>

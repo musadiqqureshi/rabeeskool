@@ -1,123 +1,168 @@
-type Feature = {
+"use client";
+
+import { useState } from "react";
+
+type Tab = {
+  id: string;
+  label: string;
+  emoji: string;
+  color: string;
+  eyebrow: string;
   title: string;
   body: string;
-  icon: React.ReactNode;
+  bullets: string[];
 };
 
-const iconProps = {
-  width: 22,
-  height: 22,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 1.8,
-  strokeLinecap: "round",
-  strokeLinejoin: "round",
-} as const;
-
-const features: Feature[] = [
+const tabs: Tab[] = [
   {
-    title: "Course builder",
-    body: "Structure modules, lessons, quizzes and drip schedules. Videos stream from your own Google Drive — hosting bill: Rs 0.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15z" />
-        <path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
-      </svg>
-    ),
+    id: "admin",
+    label: "Admin Command Center",
+    emoji: "🗂️",
+    color: "brand",
+    eyebrow: "CREATOR DASHBOARD",
+    title: "Complete Control Over Sales, Revenue & Student Churn",
+    body: "Manage your entire online academy from one unified command center. Track total enrollments, monthly orders, live revenue payouts in Rupees, and spot at-risk students instantly.",
+    bullets: ["Live revenue tracking in PKR", "Actionable daily priorities tasklist", "Automated at-risk churn alerts"],
   },
   {
-    title: "Payments your way",
-    body: "Students pay by bank transfer, JazzCash or Easypaisa and upload proof — you approve in one click. PayFast checkout coming soon.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <rect x="2" y="5" width="20" height="14" rx="2" />
-        <path d="M2 10h20" />
-      </svg>
-    ),
+    id: "student",
+    label: "Student Learning & Leaderboard",
+    emoji: "🎓",
+    color: "violet",
+    eyebrow: "STUDENT EXPERIENCE",
+    title: "A Learning Experience That Keeps Students Finishing",
+    body: "Give students a clean player, progress tracking, points, streaks and leaderboards that turn passive watching into completed courses — and completed courses into referrals.",
+    bullets: ["Points, badges, streaks & leaderboards", "Progress tracking across every course", "Mobile-friendly student portal"],
   },
   {
-    title: "Community & channels",
-    body: "Discussions, polls and Q&A keep students engaged inside your academy — not lost in someone else's app.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.4-.7L3 21l1.8-5.6a8.4 8.4 0 1 1 16.2-3.9z" />
-      </svg>
-    ),
+    id: "pay",
+    label: "JazzCash & Bank Checkout",
+    emoji: "💳",
+    color: "amber",
+    eyebrow: "PAYMENTS",
+    title: "Get Paid The Way Pakistan Actually Pays",
+    body: "Students pay by bank transfer, JazzCash or Easypaisa and upload proof at checkout. You approve in one click and they're enrolled instantly. Automated PayFast checkout is on the roadmap.",
+    bullets: ["Bank / JazzCash / Easypaisa at checkout", "One-click payment approval & auto-enroll", "PKR invoices sent automatically"],
   },
   {
-    title: "Gamification",
-    body: "Points, badges, streaks and leaderboards turn watching into finishing — completion rates your students brag about.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <path d="M8 21h8M12 17v4M7 4h10v6a5 5 0 0 1-10 0V4z" />
-        <path d="M7 6H4a2 2 0 0 0 0 4h3M17 6h3a2 2 0 0 1 0 4h-3" />
-      </svg>
-    ),
+    id: "whatsapp",
+    label: "WhatsApp & Drip Automations",
+    emoji: "📱",
+    color: "emerald",
+    eyebrow: "AUTOMATIONS",
+    title: "Reach Students Where They Actually Reply",
+    body: "Welcome messages, class reminders, drip sequences and win-back nudges go out over WhatsApp and email automatically — so nobody ghosts and nobody no-shows.",
+    bullets: ["WhatsApp enrollment & reminder flows", "Drip-scheduled lessons & emails", "Automated win-back for inactive students"],
   },
   {
-    title: "1-on-1 coaching",
-    body: "Publish your availability, let students book paid sessions, and send automatic reminders so nobody no-shows.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <rect x="3" y="4" width="18" height="18" rx="2" />
-        <path d="M16 2v4M8 2v4M3 10h18" />
-      </svg>
-    ),
-  },
-  {
-    title: "WhatsApp automations",
-    body: "Enrollment welcomes, class reminders and win-back nudges go where Pakistan actually reads them: WhatsApp.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Certificates",
-    body: "Auto-issue branded completion certificates with a public verification link employers can trust.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <circle cx="12" cy="9" r="6" />
-        <path d="M8.5 14 7 22l5-3 5 3-1.5-8" />
-      </svg>
-    ),
-  },
-  {
-    title: "Analytics & at-risk alerts",
-    body: "Revenue in PKR, enrollment trends and a daily priority list — plus alerts when a student is about to drop off.",
-    icon: (
-      <svg {...iconProps} aria-hidden="true">
-        <path d="M3 3v18h18" />
-        <path d="M7 15l4-6 4 3 5-8" />
-      </svg>
-    ),
+    id: "cert",
+    label: "Automated Certificates",
+    emoji: "🏅",
+    color: "rose",
+    eyebrow: "CERTIFICATES",
+    title: "Branded Certificates, Issued Automatically",
+    body: "The moment a student completes your course, RabeeSkool issues a branded certificate with a public verification link employers can actually trust.",
+    bullets: ["Auto-issued on course completion", "Your branding & signature", "Public verification link"],
   },
 ];
 
-export function Features() {
-  return (
-    <section id="features" className="scroll-mt-20 bg-paper py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">Features</p>
-        <h2 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-          Everything your academy needs, nothing it doesn&apos;t
-        </h2>
+const tone: Record<string, { chip: string; eyebrow: string }> = {
+  brand: { chip: "border-brand-200 bg-brand-50 text-brand-700", eyebrow: "bg-brand-50 text-brand-700" },
+  violet: { chip: "border-violet-200 bg-violet-50 text-violet-700", eyebrow: "bg-violet-50 text-violet-700" },
+  amber: { chip: "border-amber-200 bg-amber-50 text-amber-700", eyebrow: "bg-amber-50 text-amber-700" },
+  emerald: { chip: "border-emerald-200 bg-emerald-50 text-emerald-700", eyebrow: "bg-emerald-50 text-emerald-700" },
+  rose: { chip: "border-rose-200 bg-rose-50 text-rose-700", eyebrow: "bg-rose-50 text-rose-700" },
+};
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-2xl border border-line bg-white p-6 shadow-card transition-shadow hover:shadow-float"
-            >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-                {f.icon}
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-ink">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{f.body}</p>
+export function Features() {
+  const [active, setActive] = useState(tabs[0].id);
+  const tab = tabs.find((t) => t.id === active)!;
+  const t = tone[tab.color];
+
+  return (
+    <section id="features" className="scroll-mt-24 bg-paper py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+        <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">All features</p>
+        <h2 className="mx-auto mt-3 max-w-3xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+          One platform for teaching, selling and growing
+        </h2>
+        <p className="mx-auto mt-5 max-w-2xl text-lg text-muted">
+          Click through the tabs below to preview how RabeeSkool powers both your
+          admin management and your student learning experience.
+        </p>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {tabs.map((tb) => {
+            const on = tb.id === active;
+            const c = tone[tb.color];
+            return (
+              <button
+                key={tb.id}
+                type="button"
+                onClick={() => setActive(tb.id)}
+                aria-pressed={on}
+                className={`rounded-pill border px-5 py-2.5 text-sm font-semibold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 ${
+                  on ? `${c.chip} scale-[1.03] shadow-card` : "border-line bg-white text-muted hover:bg-slate-50"
+                }`}
+              >
+                <span className="mr-1.5" aria-hidden="true">{tb.emoji}</span>
+                {tb.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-10 grid items-center gap-8 rounded-3xl border border-line bg-white p-6 text-left shadow-soft sm:p-10 lg:grid-cols-2">
+          <div>
+            <span className={`inline-block rounded-md px-3 py-1 text-xs font-semibold ${t.eyebrow}`}>
+              {tab.eyebrow}
+            </span>
+            <h3 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-ink">{tab.title}</h3>
+            <p className="mt-4 leading-relaxed text-muted">{tab.body}</p>
+            <ul className="mt-6 space-y-3">
+              {tab.bullets.map((b) => (
+                <li key={b} className="flex items-center gap-2.5 text-[15px] font-medium text-ink">
+                  <span className="grad-brand flex h-5 w-5 items-center justify-center rounded-full text-white">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <a href="#pricing" className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700">
+              Experience this feature live
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </a>
+          </div>
+
+          <div className="rounded-2xl border border-line bg-gradient-to-b from-brand-50 to-white p-4">
+            <div className="rounded-xl border border-line bg-white p-5 shadow-card">
+              <div className="flex items-center justify-between border-b border-line pb-3">
+                <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${t.eyebrow}`}>{tab.emoji} {tab.label}</span>
+                <span className="text-[11px] text-muted">RabeeSkool</span>
+              </div>
+              <div className="mt-4 space-y-2.5">
+                {tab.bullets.map((b, i) => (
+                  <div key={b} className="flex items-center gap-3 rounded-lg bg-paper px-3 py-2.5">
+                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm ${t.eyebrow}`}>{i + 1}</span>
+                    <span className="text-[13px] font-medium text-ink">{b}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {["PKR 1.2M", "348", "27"].map((v, i) => (
+                  <div key={i} className="rounded-lg bg-paper px-2 py-2 text-center">
+                    <p className="text-sm font-semibold text-ink">{v}</p>
+                    <p className="text-[10px] text-muted">{["revenue", "students", "orders"][i]}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
