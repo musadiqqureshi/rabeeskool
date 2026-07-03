@@ -22,7 +22,7 @@ export default async function OnboardingPage() {
   if (membership) redirect("/admin");
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-6 py-16">
+    <div className="grad-hero-bg relative min-h-screen">
       <OnboardingForm />
     </div>
   );

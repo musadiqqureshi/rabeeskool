@@ -1,4 +1,4 @@
-import { AuthForm } from "../auth-form";
+import { LoginForm } from "./login-form";
 
 export const metadata = { title: "Sign in — RabeeSkool" };
 
@@ -8,5 +8,5 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { next } = await searchParams;
-  return <AuthForm mode="signin" next={next} />;
+  return <LoginForm next={next} />;
 }

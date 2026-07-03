@@ -1,4 +1,5 @@
 import { DashboardPreview } from "./dashboard-preview";
+import { Particles } from "./particles";
 
 const pills = [
   { big: "0%", small: "Platform commission", tone: "text-green-600" },
@@ -8,8 +9,9 @@ const pills = [
 
 export function Hero() {
   return (
-    <section id="top" className="grad-hero-bg overflow-hidden">
-      <div className="mx-auto max-w-5xl px-4 pt-16 pb-10 text-center sm:px-6 sm:pt-20">
+    <section id="top" className="grad-hero-bg relative overflow-hidden">
+      <Particles />
+      <div className="relative mx-auto max-w-5xl px-4 pt-16 pb-10 text-center sm:px-6 sm:pt-20">
         <p className="mx-auto inline-flex items-center gap-2 rounded-pill border border-brand-200 bg-white px-4 py-1.5 text-sm font-medium text-brand-700 shadow-card">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />

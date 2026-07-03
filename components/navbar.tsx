@@ -14,6 +14,7 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   return (
     <div className="sticky top-0 z-50">
@@ -47,12 +48,48 @@ export function Navbar() {
           </div>
 
           <div className="hidden items-center gap-4 lg:flex">
-            <a
-              href="/login"
-              className="text-[15px] font-medium text-ink transition-colors hover:text-brand-600"
+            <div
+              className="relative"
+              onMouseEnter={() => setLoginOpen(true)}
+              onMouseLeave={() => setLoginOpen(false)}
             >
-              Login
-            </a>
+              <button
+                type="button"
+                onClick={() => setLoginOpen((v) => !v)}
+                aria-expanded={loginOpen}
+                className="flex items-center gap-1 text-[15px] font-medium text-ink transition-colors hover:text-brand-600"
+              >
+                Login
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${loginOpen ? "rotate-180" : ""}`} aria-hidden="true">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+
+              {loginOpen && (
+                <div className="absolute right-0 top-full w-72 pt-3">
+                  <div className="rounded-2xl border border-line bg-white p-2 shadow-float">
+                    <a href="/login" className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-brand-50">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></svg>
+                      </span>
+                      <span>
+                        <span className="block text-[15px] font-semibold text-ink">Sign In</span>
+                        <span className="block text-sm text-muted">Access your dashboard</span>
+                      </span>
+                    </a>
+                    <a href="/find-my-lms" className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-brand-50">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+                      </span>
+                      <span>
+                        <span className="block text-[15px] font-semibold text-ink">Find my LMS</span>
+                        <span className="block text-sm text-muted">Lookup by email address</span>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
             <a
               href="/signup"
               className="grad-brand rounded-pill px-6 py-2.5 text-[15px] font-semibold text-white shadow-card transition-transform hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"

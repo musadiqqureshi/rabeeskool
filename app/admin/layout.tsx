@@ -8,7 +8,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex h-screen overflow-hidden bg-paper">
-      <Sidebar academyName={academy.academyName} fullName={academy.fullName} />
+      <Sidebar academyName={academy.academyName} fullName={academy.fullName} slug={academy.slug} />
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
   );

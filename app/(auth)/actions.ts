@@ -45,3 +45,34 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect("/login");
 }
+
+function siteUrl() {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3400";
+}
+
+export type NoticeState = { error?: string; ok?: string } | null;
+
+export async function sendMagicLink(_prev: NoticeState, formData: FormData): Promise<NoticeState> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Enter your email first." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: `${siteUrl()}/auth/callback` },
+  });
+  if (error) return { error: error.message };
+  return { ok: "Check your inbox for a sign-in link." };
+}
+
+export async function sendPasswordReset(_prev: NoticeState, formData: FormData): Promise<NoticeState> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Enter your email first." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl()}/auth/callback?next=/admin`,
+  });
+  if (error) return { error: error.message };
+  return { ok: "If that email exists, a reset link is on its way." };
+}

@@ -52,12 +52,20 @@ export default async function DashboardPage() {
           </h1>
           <p className="mt-1 text-muted">Here&apos;s what&apos;s happening in your academy today.</p>
         </div>
-        <Link
-          href={academy.slug ? `/a/${academy.slug}` : "#"}
-          className="rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-slate-50"
-        >
-          Visit your site ↗
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={academy.slug ? `/a/${academy.slug}` : "#"}
+            className="grad-brand rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-card transition-transform hover:scale-[1.02]"
+          >
+            Visit Student Dashboard ↗
+          </Link>
+          <Link
+            href={academy.slug ? `/a/${academy.slug}` : "#"}
+            className="rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-slate-50"
+          >
+            Visit your site ↗
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
