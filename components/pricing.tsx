@@ -70,7 +70,7 @@ export function Pricing() {
             </div>
 
             <a
-              href="mailto:hello@rabeeskool.com?subject=Start%20monthly%20plan"
+              href="/signup"
               className="mt-7 block rounded-pill bg-ink px-6 py-4 text-center text-base font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
               Get Started Monthly
@@ -111,7 +111,7 @@ export function Pricing() {
             </div>
 
             <a
-              href="mailto:hello@rabeeskool.com?subject=Start%20annual%20plan"
+              href="/signup"
               className="mt-7 block rounded-pill bg-white px-6 py-4 text-center text-base font-semibold text-brand-700 transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Get Started Annual &amp; Save

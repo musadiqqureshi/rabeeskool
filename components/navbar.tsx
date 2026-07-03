@@ -47,17 +47,14 @@ export function Navbar() {
           </div>
 
           <div className="hidden items-center gap-4 lg:flex">
-            <button
-              type="button"
-              className="flex items-center gap-1 text-[15px] font-medium text-ink transition-colors hover:text-brand-600"
+            <a
+              href="/login"
+              className="text-[15px] font-medium text-ink transition-colors hover:text-brand-600"
             >
               Login
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
+            </a>
             <a
-              href="#pricing"
+              href="/signup"
               className="grad-brand rounded-pill px-6 py-2.5 text-[15px] font-semibold text-white shadow-card transition-transform hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
               Get Started
@@ -90,7 +87,7 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="#pricing"
+              href="/signup"
               onClick={() => setOpen(false)}
               className="grad-brand mt-4 block rounded-pill px-5 py-3 text-center text-sm font-semibold text-white"
             >
