@@ -1,13 +1,6 @@
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 import { requireAcademy } from "@/lib/academy";
-
-const stats = [
-  { label: "TOTAL COURSES", value: "0", sub: "Unpublished: 0", bg: "bg-violet-50", text: "text-violet-900", subText: "text-violet-500" },
-  { label: "ENROLLMENTS (THIS MONTH)", value: "0", sub: "Total: 0", bg: "bg-emerald-50", text: "text-emerald-900", subText: "text-emerald-500" },
-  { label: "ORDERS (THIS MONTH)", value: "0", sub: "Total orders: 0", bg: "bg-sky-50", text: "text-sky-900", subText: "text-sky-500" },
-  { label: "REVENUE (ALL TIME)", value: "Rs 0", sub: "Orders: 0", bg: "bg-rose-50", text: "text-rose-900", subText: "text-rose-500" },
-  { label: "LEADS (THIS MONTH)", value: "0", sub: "YTD total: 0", bg: "bg-amber-50", text: "text-amber-900", subText: "text-amber-500" },
-];
 
 const priorities = [
   { label: "Add your first course", sub: "Your academy has no published courses yet", cta: "Create course", href: "/admin/courses", active: true },
@@ -18,6 +11,25 @@ const priorities = [
 export default async function DashboardPage() {
   const academy = await requireAcademy();
   const firstName = (academy.fullName ?? "there").split(" ")[0];
+
+  const supabase = await createClient();
+  const { count: totalCourses } = await supabase
+    .from("courses")
+    .select("id", { count: "exact", head: true })
+    .eq("academy_id", academy.academyId);
+  const { count: draftCourses } = await supabase
+    .from("courses")
+    .select("id", { count: "exact", head: true })
+    .eq("academy_id", academy.academyId)
+    .eq("status", "draft");
+
+  const stats = [
+    { label: "TOTAL COURSES", value: String(totalCourses ?? 0), sub: `Unpublished: ${draftCourses ?? 0}`, bg: "bg-violet-50", text: "text-violet-900", subText: "text-violet-500" },
+    { label: "ENROLLMENTS (THIS MONTH)", value: "0", sub: "Total: 0", bg: "bg-emerald-50", text: "text-emerald-900", subText: "text-emerald-500" },
+    { label: "ORDERS (THIS MONTH)", value: "0", sub: "Total orders: 0", bg: "bg-sky-50", text: "text-sky-900", subText: "text-sky-500" },
+    { label: "REVENUE (ALL TIME)", value: "Rs 0", sub: "Orders: 0", bg: "bg-rose-50", text: "text-rose-900", subText: "text-rose-500" },
+    { label: "LEADS (THIS MONTH)", value: "0", sub: "YTD total: 0", bg: "bg-amber-50", text: "text-amber-900", subText: "text-amber-500" },
+  ];
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
