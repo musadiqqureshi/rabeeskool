@@ -1,0 +1,98 @@
+"use client";
+
+import { useState } from "react";
+import { Logo } from "./logo";
+
+const links = [
+  { href: "#why", label: "Why RabeeSkool" },
+  { href: "#features", label: "Features" },
+  { href: "#calculator", label: "Calculator" },
+  { href: "#compare", label: "Compare" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
+];
+
+export function Navbar() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur">
+      <nav
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
+        aria-label="Main"
+      >
+        <a href="#top" className="flex items-center gap-2">
+          <Logo />
+          <span className="text-lg font-semibold tracking-tight text-ink">
+            Rabee<span className="text-brand-600">Skool</span>
+          </span>
+        </a>
+
+        <div className="hidden items-center gap-7 lg:flex">
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-sm font-medium text-muted transition-colors hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600"
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <a
+            href="#pricing"
+            className="rounded-pill px-4 py-2 text-sm font-medium text-brand-800 transition-colors hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+          >
+            Sign in
+          </a>
+          <a
+            href="#pricing"
+            className="rounded-pill bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white shadow-card transition-colors hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+          >
+            Start your academy
+          </a>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
+          className="rounded-md p-2 text-ink hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-brand-600 lg:hidden"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            {open ? (
+              <path d="M6 6l12 12M18 6L6 18" />
+            ) : (
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            )}
+          </svg>
+        </button>
+      </nav>
+
+      {open && (
+        <div className="border-t border-line bg-white px-4 pb-4 lg:hidden">
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="block border-b border-line py-3 text-sm font-medium text-ink"
+            >
+              {l.label}
+            </a>
+          ))}
+          <a
+            href="#pricing"
+            onClick={() => setOpen(false)}
+            className="mt-4 block rounded-pill bg-brand-700 px-5 py-3 text-center text-sm font-semibold text-white"
+          >
+            Start your academy
+          </a>
+        </div>
+      )}
+    </header>
+  );
+}
