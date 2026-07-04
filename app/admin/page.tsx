@@ -2,10 +2,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireAcademy } from "@/lib/academy";
 
-const priorities = [
-  { label: "Add your first course", sub: "Your academy has no published courses yet", cta: "Create course", href: "/admin/courses", active: true },
-  { label: "Connect your Google Drive", sub: "Needed to host your videos and files", cta: "Connect", href: "/admin/courses", active: true },
-  { label: "Add your payment details", sub: "Bank / JazzCash / Easypaisa for checkout", cta: "Set up", href: "/admin/services", active: true },
+const basePriorities = [
+  { label: "Add your first course", sub: "Your academy has no published courses yet", cta: "Create course", href: "/admin/courses" },
+  { label: "Connect your Google Drive", sub: "Needed to host your videos and files", cta: "Connect", href: "/admin/courses" },
+  { label: "Add your payment details", sub: "Bank / JazzCash / Easypaisa for checkout", cta: "Set up", href: "/admin/payments" },
 ];
 
 export default async function DashboardPage() {
@@ -23,11 +23,23 @@ export default async function DashboardPage() {
     .eq("academy_id", academy.academyId)
     .eq("status", "draft");
 
+  const { data: enrollAgg } = await supabase
+    .from("enrollments")
+    .select("amount, status")
+    .eq("academy_id", academy.academyId);
+
+  const rows = enrollAgg ?? [];
+  const activeCount = rows.filter((r) => r.status === "active").length;
+  const pendingCount = rows.filter((r) => r.status === "pending").length;
+  const revenue = rows
+    .filter((r) => r.status === "active")
+    .reduce((sum, r) => sum + (r.amount ?? 0), 0);
+
   const stats = [
     { label: "TOTAL COURSES", value: String(totalCourses ?? 0), sub: `Unpublished: ${draftCourses ?? 0}`, bg: "bg-violet-50", text: "text-violet-900", subText: "text-violet-500" },
-    { label: "ENROLLMENTS (THIS MONTH)", value: "0", sub: "Total: 0", bg: "bg-emerald-50", text: "text-emerald-900", subText: "text-emerald-500" },
-    { label: "ORDERS (THIS MONTH)", value: "0", sub: "Total orders: 0", bg: "bg-sky-50", text: "text-sky-900", subText: "text-sky-500" },
-    { label: "REVENUE (ALL TIME)", value: "Rs 0", sub: "Orders: 0", bg: "bg-rose-50", text: "text-rose-900", subText: "text-rose-500" },
+    { label: "ENROLLMENTS", value: String(activeCount), sub: `Total: ${activeCount}`, bg: "bg-emerald-50", text: "text-emerald-900", subText: "text-emerald-500" },
+    { label: "PENDING PAYMENTS", value: String(pendingCount), sub: "Awaiting review", bg: "bg-sky-50", text: "text-sky-900", subText: "text-sky-500" },
+    { label: "REVENUE (ALL TIME)", value: `Rs ${revenue.toLocaleString("en-PK")}`, sub: `Orders: ${activeCount}`, bg: "bg-rose-50", text: "text-rose-900", subText: "text-rose-500" },
     { label: "LEADS (THIS MONTH)", value: "0", sub: "YTD total: 0", bg: "bg-amber-50", text: "text-amber-900", subText: "text-amber-500" },
   ];
 
@@ -87,7 +99,19 @@ export default async function DashboardPage() {
           <p className="mt-0.5 text-sm text-muted">Finish setup to start enrolling students.</p>
 
           <div className="mt-5 space-y-3">
-            {priorities.map((p) => (
+            {pendingCount > 0 && (
+              <div className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <span className="h-4 w-4 shrink-0 rounded-full border border-amber-400" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-medium text-amber-900">Approve {pendingCount} pending payment{pendingCount > 1 ? "s" : ""}</p>
+                  <p className="text-xs text-amber-700">Students are waiting to be enrolled</p>
+                </div>
+                <Link href="/admin/payments" className="grad-brand shrink-0 rounded-lg px-3.5 py-1.5 text-xs font-semibold text-white">
+                  Review
+                </Link>
+              </div>
+            )}
+            {basePriorities.map((p) => (
               <div key={p.label} className="flex items-center gap-3 rounded-xl border border-line px-4 py-3">
                 <span className="h-4 w-4 shrink-0 rounded-full border border-line" />
                 <div className="min-w-0 flex-1">

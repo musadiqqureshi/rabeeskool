@@ -44,20 +44,43 @@ export default async function CoursePage({
     .eq("course_id", course.id)
     .order("position", { ascending: true });
 
-  // Phase 2: preview lessons are watchable; the rest unlock with enrollment (Phase 3).
+  // Enrollment status for the current viewer gates paid lessons.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let enrollmentStatus: "none" | "pending" | "active" = "none";
+  let enrollmentId: string | null = null;
+  if (user) {
+    const { data: enr } = await supabase
+      .from("enrollments")
+      .select("id, status")
+      .eq("course_id", course.id)
+      .eq("student_id", user.id)
+      .maybeSingle();
+    if (enr?.status === "active") enrollmentStatus = "active";
+    else if (enr?.status === "pending") enrollmentStatus = "pending";
+    enrollmentId = enr?.id ?? null;
+  }
+  const enrolled = enrollmentStatus === "active";
+
+  // Enrolled students unlock everything; otherwise only free previews play.
   const modules: PlayerModule[] = (modulesData ?? []).map((m) => ({
     id: m.id,
     title: m.title,
     lessons: [...((m.lessons as { id: string; title: string; content: string | null; video_url: string | null; is_preview: boolean; position: number }[]) ?? [])]
       .sort((a, b) => a.position - b.position)
-      .map((l) => ({
-        id: l.id,
-        title: l.title,
-        content: l.is_preview ? l.content : null,
-        isPreview: l.is_preview,
-        embedUrl: l.is_preview ? driveEmbedUrl(l.video_url) : null,
-        locked: !l.is_preview,
-      })),
+      .map((l) => {
+        const open = enrolled || l.is_preview;
+        return {
+          id: l.id,
+          title: l.title,
+          content: open ? l.content : null,
+          isPreview: l.is_preview,
+          embedUrl: open ? driveEmbedUrl(l.video_url) : null,
+          locked: !open,
+        };
+      }),
   }));
 
   const lessonCount = modules.reduce((n, m) => n + m.lessons.length, 0);
@@ -89,6 +112,9 @@ export default async function CoursePage({
             modules={modules}
             price={course.price}
             academyName={academy.name}
+            enrollmentStatus={enrollmentStatus}
+            checkoutHref={`/a/${slug}/${courseSlug}/checkout`}
+            invoiceId={enrollmentId}
           />
         </div>
       </div>

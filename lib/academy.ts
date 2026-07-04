@@ -21,15 +21,22 @@ export async function requireAcademy(): Promise<CurrentAcademy> {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: membership } = await supabase
+  const { data: memberships } = await supabase
     .from("memberships")
     .select("role, academy_id, academies ( name, slug )")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+    .order("created_at", { ascending: true });
 
-  if (!membership) redirect("/onboarding");
+  if (!memberships || memberships.length === 0) redirect("/onboarding");
+
+  // Prefer an owner/admin membership; a student-only user has no admin panel.
+  const membership =
+    memberships.find((m) => m.role === "owner" || m.role === "admin") ?? memberships[0];
+
+  if (membership.role === "student") {
+    const academy = membership.academies as unknown as { slug: string };
+    redirect(academy?.slug ? `/a/${academy.slug}` : "/");
+  }
 
   const { data: profile } = await supabase
     .from("profiles")

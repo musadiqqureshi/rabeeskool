@@ -14,10 +14,16 @@ export function CoursePlayer({
   modules,
   price,
   academyName,
+  enrollmentStatus,
+  checkoutHref,
+  invoiceId,
 }: {
   modules: PlayerModule[];
   price: number;
   academyName: string;
+  enrollmentStatus: "none" | "pending" | "active";
+  checkoutHref: string;
+  invoiceId: string | null;
 }) {
   const [active, setActive] = useState<PlayerLesson | null>(() => firstPlayable(modules));
 
@@ -61,20 +67,39 @@ export function CoursePlayer({
           </div>
         )}
 
-        <div className="mt-6 rounded-2xl bg-brand-50 p-5">
-          <p className="font-semibold text-brand-900">Enroll in this course</p>
-          <p className="mt-1 text-sm text-brand-800">
-            Get full access to every lesson from {academyName}.
-          </p>
-          <button
-            type="button"
-            disabled
-            className="mt-4 cursor-not-allowed rounded-pill bg-brand-600/60 px-6 py-3 text-sm font-semibold text-white"
-            title="Checkout arrives in Phase 3"
-          >
-            {price > 0 ? `Enroll — Rs ${price.toLocaleString("en-PK")}` : "Enroll free"} (coming soon)
-          </button>
-        </div>
+        {enrollmentStatus === "active" ? (
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-emerald-50 p-5 text-emerald-800">
+            <p className="flex items-center gap-2 font-semibold">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7" /></svg>
+              You&apos;re enrolled — every lesson is unlocked.
+            </p>
+            {invoiceId && (
+              <a href={`/invoice/${invoiceId}`} target="_blank" rel="noreferrer" className="rounded-lg border border-emerald-300 bg-white px-3.5 py-1.5 text-sm font-medium text-emerald-700 hover:bg-emerald-100">
+                View invoice
+              </a>
+            )}
+          </div>
+        ) : enrollmentStatus === "pending" ? (
+          <div className="mt-6 rounded-2xl bg-amber-50 p-5">
+            <p className="font-semibold text-amber-900">Payment under review</p>
+            <p className="mt-1 text-sm text-amber-800">
+              {academyName} is verifying your payment. You&apos;ll get full access as soon as it&apos;s approved.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-6 rounded-2xl bg-brand-50 p-5">
+            <p className="font-semibold text-brand-900">Enroll in this course</p>
+            <p className="mt-1 text-sm text-brand-800">
+              Get full access to every lesson from {academyName}.
+            </p>
+            <a
+              href={checkoutHref}
+              className="grad-brand mt-4 inline-block rounded-pill px-6 py-3 text-sm font-semibold text-white shadow-card transition-transform hover:scale-[1.02]"
+            >
+              {price > 0 ? `Enroll — Rs ${price.toLocaleString("en-PK")}` : "Enroll free"}
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Curriculum list */}

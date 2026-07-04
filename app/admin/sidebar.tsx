@@ -7,7 +7,10 @@ import { signOut } from "@/app/(auth)/actions";
 const sections: { label: string; items: { href: string; label: string; icon: string }[] }[] = [
   {
     label: "",
-    items: [{ href: "/admin", label: "Dashboard", icon: "M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 13h6v6h-6z" }],
+    items: [
+      { href: "/admin", label: "Dashboard", icon: "M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 13h6v6h-6z" },
+      { href: "/admin/payments", label: "Payments", icon: "M3 10h18M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM7 15h4" },
+    ],
   },
   {
     label: "Content",
